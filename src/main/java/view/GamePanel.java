@@ -49,48 +49,73 @@ public class GamePanel extends JPanel implements ActionListener {
         Style style = new Style();
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
+        JLabel labelDificulty = new JLabel(getDifficultyLabel());
+        JLabel labelVel = new JLabel(getVelocityLabel());
+        JLabel labelWidth = new JLabel(getWidthLabel());
+
+        JPanel buttonPanelDifficulty = new JPanel(new FlowLayout());
+        JPanel buttonPanelVelocity = new JPanel(new FlowLayout());
+        JPanel buttonPanelSize = new JPanel(new FlowLayout());
+
         JButton easyButton = new JButton("Easy");
-        easyButton.addActionListener(e -> UNIT_SIZE = 50);
+        easyButton.addActionListener(e -> {
+            UNIT_SIZE = 50;
+            labelDificulty.setText(getDifficultyLabel());
+        });
         easyButton = style.styledButton(easyButton);
         JButton mediumButton = new JButton("Medium");
         mediumButton = style.styledButton(mediumButton);
-        mediumButton.addActionListener(e -> UNIT_SIZE = 25);
+        mediumButton.addActionListener(e -> {
+            UNIT_SIZE = 25;
+            labelDificulty.setText(getDifficultyLabel());
+        });
         JButton hardButton = new JButton("Hard");
         hardButton = style.styledButton(hardButton);
-        hardButton.addActionListener(e -> UNIT_SIZE = 10);
+        hardButton.addActionListener(e -> {
+            UNIT_SIZE = 10;
+            labelDificulty.setText(getDifficultyLabel());
+        });
 
         JButton slowGameButton = new JButton("Slow");
         slowGameButton = style.styledButton(slowGameButton);
-        slowGameButton.addActionListener(e -> DELAY = 150);
+        slowGameButton.addActionListener(e -> {
+            DELAY = 150;
+            labelVel.setText(getVelocityLabel());
+        });
         JButton normalGameButton = new JButton("Normal");
         normalGameButton = style.styledButton(normalGameButton);
-        normalGameButton.addActionListener(e -> DELAY = 125);
+        normalGameButton.addActionListener(e -> {
+            DELAY = 125;
+            labelVel.setText(getVelocityLabel());
+        });
         JButton fastGameButton = new JButton("Fast");
         fastGameButton = style.styledButton(fastGameButton);
-        fastGameButton.addActionListener(e -> DELAY = 100);
+        fastGameButton.addActionListener(e -> {
+            DELAY = 100;
+            labelVel.setText(getVelocityLabel());
+        });
 
         JButton smallSizeButton = new JButton("Small");
         smallSizeButton = style.styledButton(smallSizeButton);
         smallSizeButton.addActionListener(e -> {
             SCREEN_WIDTH = 300;
             SCREEN_HEIGHT = 300;
+            labelWidth.setText(getWidthLabel());
         });
         JButton mediumSizeButton = new JButton("Medium");
         mediumSizeButton = style.styledButton(mediumSizeButton);
         mediumSizeButton.addActionListener(e -> {
             SCREEN_HEIGHT = 600;
             SCREEN_WIDTH = 600;
+            labelWidth.setText(getWidthLabel());
         });
         JButton largeSizeButton = new JButton("Large");
         largeSizeButton = style.styledButton(largeSizeButton);
         largeSizeButton.addActionListener(e -> {
             SCREEN_WIDTH = 750;
             SCREEN_HEIGHT = 750;
+            labelWidth.setText(getWidthLabel());
         });
-
-        JPanel buttonPanelDifficulty = new JPanel(new FlowLayout());
-        JPanel buttonPanelVelocity = new JPanel(new FlowLayout());
-        JPanel buttonPanelSize = new JPanel(new FlowLayout());
 
         buttonPanelDifficulty.add(easyButton);
         buttonPanelDifficulty.add(mediumButton);
@@ -112,10 +137,14 @@ public class GamePanel extends JPanel implements ActionListener {
             this.repaint();
         });
 
+        JPanel startButtonPanel = new JPanel();
+        startButtonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        startButtonPanel.add(startGameButton);
+
         this.add(buttonPanelDifficulty);
         this.add(buttonPanelSize);
         this.add(buttonPanelVelocity);
-        this.add(startGameButton);
+        this.add(startButtonPanel);
     }
     public void draw (Graphics g){
         if (running) {
@@ -242,5 +271,16 @@ public class GamePanel extends JPanel implements ActionListener {
             checkCollision();
         }
         repaint();
+    }
+    private String getDifficultyLabel() {
+        return (UNIT_SIZE == 50) ? "Baby" : (UNIT_SIZE == 25) ? "Good" : "God";
+    }
+
+    private String getVelocityLabel() {
+        return (DELAY == 150) ? "Worm" : (DELAY == 125) ? "Snake" : "Anaconda";
+    }
+
+    private String getWidthLabel() {
+        return (SCREEN_WIDTH == 300) ? "Beginner" : (SCREEN_WIDTH == 600) ? "Player" : "Insane";
     }
 }
