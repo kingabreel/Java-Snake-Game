@@ -3,15 +3,15 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import java.util.Random;
 
 public class GamePanel extends JPanel implements ActionListener {
-    static final int SCREEN_WIDTH = 600;
-    static final int SCREEN_HEIGHT = 600;
-    static final int UNIT_SIZE = 25;
-    static final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/UNIT_SIZE;
-    static final int DELAY = 100;
+    public boolean verified = false;
+    int SCREEN_WIDTH = 600;
+    int SCREEN_HEIGHT = 600;
+    static int UNIT_SIZE = 25;
+    final int GAME_UNITS = (SCREEN_WIDTH*SCREEN_HEIGHT)/UNIT_SIZE;
+    static int DELAY = 100;
     final int x[] = new int [GAME_UNITS];
     final int y[] = new int [GAME_UNITS];
     int body = 6;
@@ -25,11 +25,12 @@ public class GamePanel extends JPanel implements ActionListener {
 
     public GamePanel(){
         random = new Random();
-        this.setPreferredSize(new Dimension(SCREEN_WIDTH, SCREEN_HEIGHT));
+        this.setPreferredSize(new Dimension(850, 850));
         this.setBackground(Color.BLACK);
         this.setFocusable(true);
+        this.setAlignmentX(CENTER_ALIGNMENT);
+        this.setAlignmentY(CENTER_ALIGNMENT);
         this.addKeyListener(new MyKeyAdapter());
-        startGame();
     }
     public void startGame(){
         newApple();
@@ -42,6 +43,67 @@ public class GamePanel extends JPanel implements ActionListener {
         draw(g);
     }
 
+    public void menu(){
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JButton easyButton = new JButton("Easy");
+        easyButton.addActionListener(e -> UNIT_SIZE = 50);
+        JButton mediumButton = new JButton("Medium");
+        mediumButton.addActionListener(e -> UNIT_SIZE = 25);
+        JButton hardButton = new JButton("Hard");
+        hardButton.addActionListener(e -> UNIT_SIZE = 10);
+
+        JButton slowGameButton = new JButton("Slow");
+        slowGameButton.addActionListener(e -> DELAY = 150);
+        JButton normalGameButton = new JButton("Normal");
+        normalGameButton.addActionListener(e -> DELAY = 125);
+        JButton fastGameButton = new JButton("Fast");
+        fastGameButton.addActionListener(e -> DELAY = 100);
+
+        JButton smallSizeButton = new JButton("Small");
+        smallSizeButton.addActionListener(e -> {
+            SCREEN_WIDTH = 300;
+            SCREEN_HEIGHT = 300;
+        });
+        JButton mediumSizeButton = new JButton("Medium");
+        mediumSizeButton.addActionListener(e -> {
+            SCREEN_HEIGHT = 600;
+            SCREEN_WIDTH = 600;
+        });
+        JButton largeSizeButton = new JButton("Large");
+        largeSizeButton.addActionListener(e -> {
+            SCREEN_WIDTH = 750;
+            SCREEN_HEIGHT = 750;
+        });
+
+        JPanel buttonPanelDifficulty = new JPanel(new FlowLayout());
+        JPanel buttonPanelVelocity = new JPanel(new FlowLayout());
+        JPanel buttonPanelSize = new JPanel(new FlowLayout());
+
+        buttonPanelDifficulty.add(easyButton);
+        buttonPanelDifficulty.add(mediumButton);
+        buttonPanelDifficulty.add(hardButton);
+
+        buttonPanelVelocity.add(slowGameButton);
+        buttonPanelVelocity.add(normalGameButton);
+        buttonPanelVelocity.add(fastGameButton);
+
+        buttonPanelSize.add(smallSizeButton);
+        buttonPanelSize.add(mediumSizeButton);
+        buttonPanelSize.add(largeSizeButton);
+
+        JButton startGameButton = new JButton("Start Game");
+        startGameButton.addActionListener(e -> {
+            verified = true;
+            this.removeAll();
+            this.repaint();
+        });
+
+        this.add(buttonPanelDifficulty);
+        this.add(buttonPanelSize);
+        this.add(buttonPanelVelocity);
+        this.add(startGameButton);
+    }
     public void draw (Graphics g){
         if (running) {
             for (int i = 0; i < SCREEN_HEIGHT / UNIT_SIZE; i++) {
